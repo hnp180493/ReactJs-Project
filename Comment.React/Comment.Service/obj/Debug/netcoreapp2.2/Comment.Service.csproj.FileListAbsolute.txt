@@ -1,0 +1,14 @@
+C:\Users\admin\Desktop\ReactJs\ReactJs-Project\Comment.React\Comment.Service\bin\Debug\netcoreapp2.2\Comment.Service.deps.json
+C:\Users\admin\Desktop\ReactJs\ReactJs-Project\Comment.React\Comment.Service\bin\Debug\netcoreapp2.2\Comment.Service.dll
+C:\Users\admin\Desktop\ReactJs\ReactJs-Project\Comment.React\Comment.Service\bin\Debug\netcoreapp2.2\Comment.Service.pdb
+C:\Users\admin\Desktop\ReactJs\ReactJs-Project\Comment.React\Comment.Service\bin\Debug\netcoreapp2.2\Comment.Data.dll
+C:\Users\admin\Desktop\ReactJs\ReactJs-Project\Comment.React\Comment.Service\bin\Debug\netcoreapp2.2\Microsoft.EntityFrameworkCore.dll
+C:\Users\admin\Desktop\ReactJs\ReactJs-Project\Comment.React\Comment.Service\bin\Debug\netcoreapp2.2\Comment.Data.pdb
+C:\Users\admin\Desktop\ReactJs\ReactJs-Project\Comment.React\Comment.Service\bin\Debug\netcoreapp2.2\Microsoft.EntityFrameworkCore.xml
+C:\Users\admin\Desktop\ReactJs\ReactJs-Project\Comment.React\Comment.Service\obj\Debug\netcoreapp2.2\Comment.Service.csprojAssemblyReference.cache
+C:\Users\admin\Desktop\ReactJs\ReactJs-Project\Comment.React\Comment.Service\obj\Debug\netcoreapp2.2\Comment.Service.csproj.CoreCompileInputs.cache
+C:\Users\admin\Desktop\ReactJs\ReactJs-Project\Comment.React\Comment.Service\obj\Debug\netcoreapp2.2\Comment.Service.AssemblyInfoInputs.cache
+C:\Users\admin\Desktop\ReactJs\ReactJs-Project\Comment.React\Comment.Service\obj\Debug\netcoreapp2.2\Comment.Service.AssemblyInfo.cs
+C:\Users\admin\Desktop\ReactJs\ReactJs-Project\Comment.React\Comment.Service\obj\Debug\netcoreapp2.2\Comment.Service.csproj.CopyComplete
+C:\Users\admin\Desktop\ReactJs\ReactJs-Project\Comment.React\Comment.Service\obj\Debug\netcoreapp2.2\Comment.Service.dll
+C:\Users\admin\Desktop\ReactJs\ReactJs-Project\Comment.React\Comment.Service\obj\Debug\netcoreapp2.2\Comment.Service.pdb
