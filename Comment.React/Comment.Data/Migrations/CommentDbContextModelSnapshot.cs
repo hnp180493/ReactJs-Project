@@ -4,41 +4,39 @@ using Comment.React.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace Comment.React.Migrations
+namespace Comment.Data.Migrations
 {
     [DbContext(typeof(CommentDbContext))]
-    [Migration("20190131060738_addLikeButtonModel")]
-    partial class addLikeButtonModel
+    partial class CommentDbContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.0-rtm-35687")
+                .HasAnnotation("ProductVersion", "2.2.4-servicing-10062")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("Comment.React.Models.CommentModel", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("CommentId")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Content");
 
-                    b.Property<string>("DateFormatted");
+                    b.Property<DateTime>("CreatedOn");
 
                     b.Property<string>("Email")
                         .HasMaxLength(500);
 
                     b.Property<int>("Like");
 
-                    b.Property<int?>("ParentId");
+                    b.Property<int>("ParentId");
 
-                    b.HasKey("Id");
+                    b.HasKey("CommentId");
 
                     b.HasIndex("Email");
 
@@ -49,11 +47,13 @@ namespace Comment.React.Migrations
                 {
                     b.Property<int>("CommentId");
 
-                    b.Property<string>("UserId");
+                    b.Property<string>("Email");
 
-                    b.HasKey("CommentId", "UserId");
+                    b.Property<bool>("IsLike");
 
-                    b.HasIndex("UserId");
+                    b.HasKey("CommentId", "Email");
+
+                    b.HasIndex("Email");
 
                     b.ToTable("LikeButtons");
                 });
@@ -95,7 +95,7 @@ namespace Comment.React.Migrations
 
                     b.HasOne("Comment.React.Models.UserModel", "User")
                         .WithMany()
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("Email")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618

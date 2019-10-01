@@ -1,12 +1,8 @@
-﻿using AutoMapper;
-using Comment.React.Helper;
+﻿using Comment.Model.Response;
 using Comment.React.Models;
 using Comment.React.Service;
-using Comment.React.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
-using System.Linq;
-using User.React.Service;
 
 namespace Comment.React.Controllers
 {
@@ -15,24 +11,31 @@ namespace Comment.React.Controllers
     public class CommentController : ControllerBase
     {
         private readonly ICommentService _commentService;
-        private readonly IMapper _mapper;
         private readonly ILikeButtonService _likeService;
-        public CommentController(ICommentService commentService, ILikeButtonService likeService, IMapper mapper)
+        public CommentController(ICommentService commentService, ILikeButtonService likeService)
         {
             _commentService = commentService;
-            _mapper = mapper;
             _likeService = likeService;
         }
 
         [HttpGet]
-        [Route("getall")]
-        public List<CommentViewModel> GetAll()
+        [Route("get-comments")]
+        public IEnumerable<CommentResponse> GetComments(int page, int pageSize)
         {
-            var commentsModel = _commentService.GetCommentsAndUsers().ToList();
-            var commentsView = _mapper.Map<List<CommentViewModel>>(commentsModel);
+            var comments = _commentService.GetCommentsAndUsers(page, pageSize);
 
-            return commentsView;
+            return comments;
         }
+
+        [HttpGet]
+        [Route("get-child-comments-and-users")]
+        public IEnumerable<CommentResponse> GetChildCommentsAndUsers(int parentId, int page, int pageSize)
+        {
+            var comments = _commentService.GetChildCommentsAndUsers(parentId, page, pageSize);
+
+            return comments;
+        }
+
 
         [HttpGet]
         [Route("getById/{id}")]
@@ -43,10 +46,9 @@ namespace Comment.React.Controllers
 
         [HttpPost]
         [Route("add")]
-        public void Add([FromBody]CommentModel commentViewModel)
+        public void Add([FromBody]AddOrEditCommentRequest comment)
         {
-            var commentModel = _mapper.Map<CommentModel>(commentViewModel);
-            _commentService.Add(commentModel);
+            _commentService.Add(comment);
         }
 
 

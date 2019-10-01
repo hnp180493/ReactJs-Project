@@ -1,0 +1,20 @@
+.comment-wrapper .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.child-reply {
+    width: 400px;
+    margin-top: 8px;
+    float: right;
+}
+
+.child-reply br{
+    content: " ";
+    display: none;
+}
+
+.child-reply button{
+    margin-top: 10px;
+}

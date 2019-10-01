@@ -5,7 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="8.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Comment.Data\Comment.Data.csproj" />
+    <ProjectReference Include="..\Comment.Model\Comment.Model.csproj" />
   </ItemGroup>
 
 </Project>

@@ -14,13 +14,13 @@ namespace Comment.React.Models
         public int CommentId { get; set; }
         [Key]
         [Column(Order = 2)]
-        public string UserId { get; set; }
+        public string Email { get; set; }
 
         public bool IsLike { get; set; } = true;
 
         [ForeignKey("CommentId")]
         public virtual CommentModel Comment { get; set; }
-        [ForeignKey("UserId")]
+        [ForeignKey("Email")]
         public virtual UserModel User { get; set; }
     }
 }

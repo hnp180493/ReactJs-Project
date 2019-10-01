@@ -16,7 +16,7 @@ namespace Comment.React.Repository
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<LikeButtonModel>()
-                .HasKey(x => new {x.CommentId, x.UserId });
+                .HasKey(x => new {x.CommentId, x.Email });
         }
 
         public virtual DbSet<CommentModel> Comments { get; set; }

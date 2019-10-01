@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Comment.Model.Enum;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Comment.React.Models

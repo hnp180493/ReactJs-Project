@@ -1,9 +1,9 @@
-﻿using Comment.React.Models;
+﻿using AutoMapper;
+using Comment.Model.Response;
+using Comment.React.Models;
 using Comment.React.Repository;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Comment.React.Service
 {
@@ -11,24 +11,31 @@ namespace Comment.React.Service
     {
         IEnumerable<CommentModel> GetAll();
         CommentModel GetById(int id);
-        void Add(CommentModel comment);
+        void Add(AddOrEditCommentRequest comment);
         void Update(CommentModel comment);
         void Delete(int id);
-        IEnumerable<CommentModel> GetCommentsAndUsers();
+        IEnumerable<CommentResponse> GetCommentsAndUsers(int page, int pageSize);
+        IEnumerable<CommentResponse> GetChildCommentsAndUsers(int parentId, int page, int pageSize);
     }
     public class CommentService: ICommentService
     {
         private readonly ICommentRepository _commentRepo;
+        private readonly IMapper _mapper;
 
-        public CommentService(ICommentRepository commentRepo)
+        public CommentService(ICommentRepository commentRepo, IMapper mapper)
         {
             _commentRepo = commentRepo;
+            _mapper = mapper;
+
         }
 
-        public void Add(CommentModel comment)
+        public void Add(AddOrEditCommentRequest comment)
         {
-            comment.DateFormatted = DateTime.Now.ToString("d");
-            _commentRepo.Add(comment);
+            var commentModel = _mapper.Map<CommentModel>(comment);
+
+            commentModel.CreatedOn = DateTime.Now;
+
+            _commentRepo.Add(commentModel);
             _commentRepo.SaveChange();
         }
 
@@ -48,9 +55,18 @@ namespace Comment.React.Service
             return _commentRepo.GetById(id);
         }
 
-        public IEnumerable<CommentModel> GetCommentsAndUsers()
+        public IEnumerable<CommentResponse> GetCommentsAndUsers(int page, int pageSize)
         {
-            return _commentRepo.GetCommentsAndUsers();
+            var data= _commentRepo.GetCommentsAndUsers(page, pageSize);
+            var comments = _mapper.Map<IEnumerable<CommentResponse>>(data);
+            return comments;
+        }
+
+        public IEnumerable<CommentResponse> GetChildCommentsAndUsers(int parentId, int page, int pageSize)
+        {
+            var data = _commentRepo.GetChildCommentsAndUsers(parentId, page, pageSize);
+            var comments = _mapper.Map<IEnumerable<CommentResponse>>(data);
+            return comments;
         }
 
 

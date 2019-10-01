@@ -6,22 +6,35 @@ using System.Linq;
 
 namespace Comment.React.Repository
 {
-    public interface ICommentRepository: IRepository<CommentModel>
+    public interface ICommentRepository : IRepository<CommentModel>
     {
-        IEnumerable<CommentModel> GetCommentsAndUsers();
+        IEnumerable<CommentModel> GetCommentsAndUsers(int page, int pageSize);
+        IEnumerable<CommentModel> GetChildCommentsAndUsers(int parentId, int page = 1, int pageSize = 10);
     }
-    public class CommentRepository: RepositoryBase<CommentModel>, ICommentRepository
+    public class CommentRepository : RepositoryBase<CommentModel>, ICommentRepository
     {
-        public CommentRepository(CommentDbContext commentDb): base(commentDb)
+        public CommentRepository(CommentDbContext commentDb) : base(commentDb)
         {
         }
 
-        public IEnumerable<CommentModel> GetCommentsAndUsers()
+        public IEnumerable<CommentModel> GetCommentsAndUsers(int page = 1, int pageSize = 10)
         {
-            var data = _dataContext.Comments.Include("User").OrderByDescending(x=>x.Id).ToList();
+            var query = _dataContext.Comments.Skip((page - 1) * pageSize).Take(pageSize)
+                .OrderByDescending(x => x.CommentId)
+                .Where(x=>x.ParentId == 0);
             var madData = _dataContext.Comments.Include(x => x.User).Select(x => new { x.User }).ToList();
 
-            return data;
+            return query;
+        }
+
+        public IEnumerable<CommentModel> GetChildCommentsAndUsers(int parentId, int page = 1, int pageSize = 10)
+        {
+            var query = _dataContext.Comments.Where(x=> x.ParentId == parentId).Skip((page - 1) * pageSize).Take(pageSize)
+                .OrderByDescending(x => x.CommentId)
+                .Where(x => x.ParentId == 0);
+            var madData = _dataContext.Comments.Include(x => x.User).Select(x => new { x.User }).ToList();
+
+            return query;
         }
     }
 }

@@ -1,7 +1,8 @@
 import React from 'react';
 import FetchApi from '../../service/fetchApi';
 import Comment from './Comment'
-export default class ListComment extends React.Component {
+import { connect } from 'react-redux';
+class ListComment extends React.Component {
     constructor() {
         super();
         this.state = {
@@ -9,27 +10,48 @@ export default class ListComment extends React.Component {
         }
     }
 
-    async componentDidMount(){
-        let comments = await FetchApi.get('/api/Comment/getall');
-        this.setState({
-            lstComments: comments
-        })
-        console.log(comments);
+    async componentDidMount() {
+        await this.getComments();
+    }
+
+    async componentDidUpdate() {
+        if (this.props.forceReload) {
+            await this.getComments();
+        }
+    }
+
+    async getComments() {
+        let comments = await FetchApi.get('/api/Comment/get-comments?page=1&pageSize=10');
+        this.props.dispatchGetComments(comments);
     }
 
     renderComments() {
         return (
-           this.state.lstComments.map((comment, index)=>{
-               return <Comment />;
-           })
+            this.props.comments.map((comment, i) => {
+                return <Comment key={i} comment={comment}></Comment>;
+            })
         );
     }
     render() {
-        let content = this.renderComments(this.props.comments);
         return (
             <ul className="media-list">
-                {content}
+                {this.renderComments()}
             </ul>
         )
     }
 }
+
+const mapStateToProps = (state) => {
+    return {
+        forceReload: state.comments.forceReload,
+        comments: state.comments.comments
+    }
+}
+const mapDispatchToProps = (dispatch) => {
+    return {
+        dispatchGetComments: (comments) => {
+            dispatch({ type: 'GET_COMMENTS', comments })
+        }
+    }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(ListComment);

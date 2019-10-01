@@ -1,6 +1,8 @@
 ﻿
 class FetchAPI {
     static host = `http://localhost:55937`;
+    static addComment = `/api/comment/add`;
+    static getChildCommentsAndUsers = `/api/comment/get-child-comments-and-users`;
 
     static async get(url) {
         const response = await fetch(`${this.host}${url}`);
@@ -16,9 +18,9 @@ class FetchAPI {
             });
     }
 
-    static post(url, params) {
+    static async post(url, params) {
         // Default options are marked with *
-        return fetch(`${this.host}${url}`, {
+        return await fetch(`${this.host}${url}`, {
             method: "POST", // *GET, POST, PUT, DELETE, etc.
             mode: "cors", // no-cors, cors, *same-origin
             cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached

@@ -1,0 +1,9 @@
+C:\Users\admin\Desktop\ReactJs\ReactJs-Project\Comment.React\Comment.Model\bin\Debug\netcoreapp2.2\Comment.Model.deps.json
+C:\Users\admin\Desktop\ReactJs\ReactJs-Project\Comment.React\Comment.Model\bin\Debug\netcoreapp2.2\Comment.Model.dll
+C:\Users\admin\Desktop\ReactJs\ReactJs-Project\Comment.React\Comment.Model\bin\Debug\netcoreapp2.2\Comment.Model.pdb
+C:\Users\admin\Desktop\ReactJs\ReactJs-Project\Comment.React\Comment.Model\obj\Debug\netcoreapp2.2\Comment.Model.csprojAssemblyReference.cache
+C:\Users\admin\Desktop\ReactJs\ReactJs-Project\Comment.React\Comment.Model\obj\Debug\netcoreapp2.2\Comment.Model.csproj.CoreCompileInputs.cache
+C:\Users\admin\Desktop\ReactJs\ReactJs-Project\Comment.React\Comment.Model\obj\Debug\netcoreapp2.2\Comment.Model.AssemblyInfoInputs.cache
+C:\Users\admin\Desktop\ReactJs\ReactJs-Project\Comment.React\Comment.Model\obj\Debug\netcoreapp2.2\Comment.Model.AssemblyInfo.cs
+C:\Users\admin\Desktop\ReactJs\ReactJs-Project\Comment.React\Comment.Model\obj\Debug\netcoreapp2.2\Comment.Model.dll
+C:\Users\admin\Desktop\ReactJs\ReactJs-Project\Comment.React\Comment.Model\obj\Debug\netcoreapp2.2\Comment.Model.pdb
