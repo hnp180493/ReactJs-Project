@@ -1,14 +1,12 @@
-const initState = {
-    comments: [],
+const initCommentState = {
     forceReload: false
 }
 
-const commentReducer = (state = initState, action) => {
+const commentReducer = (state = initCommentState, action) => {
     switch (action.type) {
         case "GET_COMMENTS":
             return {
                 ...state,
-                comments: action.comments,
                 forceReload: false
             }
         case "ADD_COMMENT":

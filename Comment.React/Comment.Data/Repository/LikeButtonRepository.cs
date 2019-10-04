@@ -7,18 +7,17 @@ namespace Comment.React.Repository
 {
     public interface ILikeButtonRepository : IRepository<LikeButtonModel>
     {
-        Task<int> TotalLikeByCommentId(int commentId);
+        int GetTotalLikeComment(int commentId);
     }
     public class LikeButtonRepository : RepositoryBase<LikeButtonModel>, ILikeButtonRepository
     {
-        public LikeButtonRepository(CommentDbContext commentDb):base(commentDb)
+        public LikeButtonRepository(CommentDbContext commentDb) : base(commentDb)
         {
         }
 
-        public async Task<int> TotalLikeByCommentId(int commentId)
+        public int GetTotalLikeComment(int commentId)
         {
-            var result = await _dataContext.LikeButtons.CountAsync(x => x.CommentId == commentId && x.IsLike);
-            return result;
+            return _dataContext.LikeButtons.Count(x => x.CommentId == commentId && x.IsLike);
         }
     }
 }

@@ -19,5 +19,17 @@ namespace Comment.React.Controllers
         {
             _likeButtonService = likeButtonService;
         }
+
+        [HttpPost("like-comment")]
+        public bool LikeComment(int commentId, string email)
+        {
+            return _likeButtonService.LikeComment(commentId, email);
+        }
+
+        [HttpGet("total-like-comment")]
+        public int LikeComment(int commentId)
+        {
+            return _likeButtonService.GetTotalLikeComment(commentId);
+        }
     }
 }

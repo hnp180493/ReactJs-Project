@@ -8,8 +8,9 @@ namespace Comment.React.Repository
 {
     public interface ICommentRepository : IRepository<CommentModel>
     {
-        IEnumerable<CommentModel> GetCommentsAndUsers(int page, int pageSize);
-        IEnumerable<CommentModel> GetChildCommentsAndUsers(int parentId, int page = 1, int pageSize = 10);
+        IEnumerable<CommentModel> GetCommentsAndUsers(string email, int page, int pageSize);
+        IEnumerable<CommentModel> GetChildCommentsAndUsers(string email, int parentId, int page = 1, int pageSize = 10);
+        int GetTotalRows(int parentId = 0);
     }
     public class CommentRepository : RepositoryBase<CommentModel>, ICommentRepository
     {
@@ -17,24 +18,58 @@ namespace Comment.React.Repository
         {
         }
 
-        public IEnumerable<CommentModel> GetCommentsAndUsers(int page = 1, int pageSize = 10)
+        public IEnumerable<CommentModel> GetCommentsAndUsers(string email, int page = 1, int pageSize = 10)
         {
-            var query = _dataContext.Comments.Skip((page - 1) * pageSize).Take(pageSize)
-                .OrderByDescending(x => x.CommentId)
-                .Where(x=>x.ParentId == 0);
-            var madData = _dataContext.Comments.Include(x => x.User).Select(x => new { x.User }).ToList();
+            var comments = _dataContext.Comments.OrderByDescending(x => x.CommentId)
+                .Where(x => x.ParentId == 0)
+                .Skip((page - 1) * pageSize).Take(pageSize);
+            foreach (var item in comments)
+            {
+                item.TotalReply = _dataContext.Comments.Count(x => x.ParentId == item.CommentId);
+                item.TotalLike = _dataContext.LikeButtons.Count(x => x.IsLike && x.CommentId == item.CommentId);
+                var buttonLike = _dataContext.LikeButtons.FirstOrDefault(x => x.Email == email && x.CommentId == item.CommentId);
+                if (buttonLike == null)
+                {
+                    item.IsLike = false;
+                }
+                else
+                {
+                    item.IsLike = buttonLike.IsLike;
+                }
+            }
 
-            return query;
+            _dataContext.Comments.Include(x => x.User).Select(x => new { x.User }).ToList();
+
+            return comments;
         }
 
-        public IEnumerable<CommentModel> GetChildCommentsAndUsers(int parentId, int page = 1, int pageSize = 10)
+        public IEnumerable<CommentModel> GetChildCommentsAndUsers(string email, int parentId, int page = 1, int pageSize = 10)
         {
-            var query = _dataContext.Comments.Where(x=> x.ParentId == parentId).Skip((page - 1) * pageSize).Take(pageSize)
-                .OrderByDescending(x => x.CommentId)
-                .Where(x => x.ParentId == 0);
-            var madData = _dataContext.Comments.Include(x => x.User).Select(x => new { x.User }).ToList();
+            var comments = _dataContext.Comments.OrderByDescending(x => x.CommentId)
+                .Where(x => x.ParentId == parentId)
+                .Skip((page - 1) * pageSize).Take(pageSize);
+            foreach (var item in comments)
+            {
+                item.TotalLike = _dataContext.LikeButtons.Count(x => x.IsLike && x.CommentId == item.CommentId);
+                var buttonLike = _dataContext.LikeButtons.FirstOrDefault(x => x.Email == email && x.CommentId == item.CommentId);
+                if (buttonLike == null)
+                {
+                    item.IsLike = false;
+                }
+                else
+                {
+                    item.IsLike = buttonLike.IsLike;
+                }
+            }
+            _dataContext.Comments.Include(x => x.User).Select(x => new { x.User }).ToList();
 
-            return query;
+            return comments;
         }
+
+        public int GetTotalRows(int parentId = 0)
+        {
+            return _dataContext.Comments.Count(x => x.ParentId == parentId);
+        }
+
     }
 }

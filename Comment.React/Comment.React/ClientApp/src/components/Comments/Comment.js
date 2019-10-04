@@ -1,46 +1,58 @@
 import React, { Component } from 'react';
-import ChildComment from './ChildComment';
 import Helper from '../../service/helper';
 import FormComment from '../FormComment';
-import FetchAPI from '../../service/fetchApi';
-
+import ListChildComment from './ListChildComment';
+import Like from '../Common/Like';
+import TotalReply from './TotalReply';
+import {connect} from 'react-redux';
 class Comment extends Component {
     constructor() {
         super();
         this.state = {
-            replyText: 'Reply',
-            toggleReply: false
+            toggleReply: false,
+            toggleChildComment: false
         }
     }
-    toggleReply = () => {
-        if (this.state.toggleReply) {
-            return (
-                <div className="child-reply">
-                    <FormComment rows={2} parentId={this.props.comment.commentId} />
-                </div>
-            )
-        }
-    }
+
     handleReply = () => {
         this.setState({
             toggleReply: !this.state.toggleReply,
-            replyText: this.state.toggleReply ? 'Hide' : 'Reply'
         })
     }
-    getChildComments = async () => {
-        var request = `${FetchAPI.getChildCommentsAndUsers}?parentId=${this.props.comment.commentId}`;
-        let childs = await FetchAPI.get(request);
-        if (childs.length > 0) {
-            return childs.map((comment, index) => {
-                return (
-                    <ChildComment />
-                )
-            })
-        }
+    handleChildComments = () => {
+        this.setState({
+            toggleChildComment: !this.state.toggleChildComment
+        })
     }
 
-    render() {
+    changeStateAfterComment = () => {
+        this.setState({
+            toggleReply: false,
+            toggleChildComment: true
+        })
+    }
 
+    renderReplyText = () => {
+        return this.state.toggleReply ? 'Hide' : 'Reply';
+    }
+    renderChildComments = () => {
+        if (this.state.toggleChildComment) {
+            return <ListChildComment parentId={this.props.comment.commentId} />
+        }
+    }
+    renderReplyForm = () => {
+        if (this.state.toggleReply) {
+            return (
+                <div className="child-reply">
+                    <FormComment rows={1} 
+                        parentId={this.props.comment.commentId} 
+                        changeStateAfterComment={this.changeStateAfterComment} />
+                </div>
+            )
+        }
+    } 
+
+    render() {
         return (
             <li className="media">
                 <a href="https://www.google.com/" className="float-left">
@@ -58,13 +70,28 @@ class Comment extends Component {
                             <p>
                                 {this.props.comment.content}
                             </p>
-                            <a className="float-right btn btn-outline-primary ml-2" onClick={this.handleReply}> <i className="fa fa-reply" /> {this.state.replyText}</a>
-                            <a className="float-right btn text-white btn-danger"> <i className="fa fa-heart" /> Like</a>
                         </div>
-                    </div>
-                    {this.toggleReply()}
+                        <div className="btn-wrapper">
+                            <Like like={
+                                {
+                                    commentId: this.props.comment.commentId,
+                                    email: this.props.comment.email,
+                                    totalLike: this.props.comment.totalLike,
+                                    isLike: this.props.comment.isLike
+                                }
+                            } />
+                            <a className="btn-child-reply" onClick={this.handleReply}> <i className="fa fa-reply" /> {this.renderReplyText()}</a>
+                            {this.renderReplyForm()}
 
-                    {this.getChildComments()}
+                            <TotalReply 
+                                totalReply={this.props.comment.totalReply}
+                                toggleChildComment={this.state.toggleChildComment}
+                                handleChildComments={this.handleChildComments}/>
+                        </div>
+
+                    </div>
+
+                    {this.renderChildComments()}
                 </div>
             </li>
 
@@ -72,4 +99,5 @@ class Comment extends Component {
     }
 }
 
-export default Comment;
+
+export default connect()(Comment);

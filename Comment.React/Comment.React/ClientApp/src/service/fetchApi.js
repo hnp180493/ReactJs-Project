@@ -1,39 +1,22 @@
 ﻿
+const axios = require('axios');
 class FetchAPI {
     static host = `http://localhost:55937`;
     static addComment = `/api/comment/add`;
     static getChildCommentsAndUsers = `/api/comment/get-child-comments-and-users`;
+    static getComments = `/api/Comment/get-comments`;
+    static likeComment = `/api/likebutton/like-comment`;
+    static getTotalLikeComment = `/api/likebutton/total-like-comment`;
 
-    static async get(url) {
-        const response = await fetch(`${this.host}${url}`);
-        const data = await response.json();
-        return data;
-    }
-
-    static getWithCallBack(url, callback) {
-        fetch(url)
-            .then(response => response.json())
-            .then(data => {
-                callback(data);
-            });
+    static async get(url, params) {
+        let response = await axios.get(`${this.host}${url}`, {
+            params: params
+          });
+        return response.data;
     }
 
     static async post(url, params) {
-        // Default options are marked with *
-        return await fetch(`${this.host}${url}`, {
-            method: "POST", // *GET, POST, PUT, DELETE, etc.
-            mode: "cors", // no-cors, cors, *same-origin
-            cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-            credentials: "same-origin", // include, *same-origin, omit
-            headers: {
-                "Content-Type": "application/json",
-                // "Content-Type": "application/x-www-form-urlencoded",
-            },
-            redirect: "follow", // manual, *follow, error
-            referrer: "no-referrer", // no-referrer, *client
-            body: JSON.stringify(params), // body data type must match "Content-Type" header
-        });
-        // .then(response => response.json()); // parses response to JSON
+        return await axios.post(`${this.host}${url}`, params);
     }
 
     static put(url, params) {

@@ -1,6 +1,6 @@
 import React from 'react';
 import FetchAPI from '../service/fetchApi';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 class FormComment extends React.Component {
     constructor() {
         super();
@@ -26,22 +26,29 @@ class FormComment extends React.Component {
             content: content,
             parentId: this.props.parentId
         }
-        
+
         await FetchAPI.post(FetchAPI.addComment, params);
         this.resetForm();
-        this.props.dispatchAddComment();
+        
+        //Child Form Comment
+        if (this.props.changeStateAfterComment) {
+            this.props.dispatchAddChildComment(this.props.parentId);
+            this.props.changeStateAfterComment();
+        }else{ //Parent Form Comment
+            this.props.dispatchAddComment();
+        }
     }
 
-    resetForm(){
+    resetForm() {
         this.content.current.value = "";
     }
 
     render() {
         return (
             <form onSubmit={(e) => this.addComment(e)}>
-                <textarea className="form-control"
+                <textarea className="comment-input"
                     placeholder="write a comment..."
-                    rows={this.props.rows || 3}
+                    rows={this.props.rows || 2}
                     defaultValue={""}
                     ref={this.content} />
                 <br />
@@ -51,10 +58,13 @@ class FormComment extends React.Component {
     }
 }
 
-let mapDispatchToProps = (dispatch)=>{
+let mapDispatchToProps = (dispatch) => {
     return {
-        dispatchAddComment: ()=>{
-            dispatch({type: 'ADD_COMMENT'})
+        dispatchAddComment: () => {
+            dispatch({ type: 'ADD_COMMENT' })
+        },
+        dispatchAddChildComment: (parentId) => {
+            dispatch({ type: 'ADD_CHILD_COMMENT', parentId })
         }
     }
 }

@@ -2,7 +2,10 @@ using AutoMapper;
 using Comment.React.Helper;
 using Comment.React.Repository;
 using Comment.React.Service;
+using Comment.Service.SignalR;
+using Microsoft.AspNet.SignalR;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
@@ -54,12 +57,25 @@ namespace Comment.React
 
             services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
             {
-                builder.WithOrigins("http://localhost:3000")
-                       .AllowAnyMethod()
-                       .AllowAnyHeader();
+                //builder.WithOrigins("")
+                //       .AllowAnyMethod()
+                //       .AllowAnyHeader();
+                builder.WithOrigins(
+                    "http://localhost:3000",
+                    "https://localhost:3000"
+                )
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .AllowCredentials();
             }));
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddSignalR();
+
+            services.AddMvc()/*.SetCompatibilityVersion(CompatibilityVersion.Version_2_2)*/
+                .AddJsonOptions(options =>
+                {
+                    options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -81,7 +97,11 @@ namespace Comment.React
             app.UseSpaStaticFiles();
 
             app.UseCors("MyPolicy");
-
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<LikeButtonHub>("/like-button-hub");
+            });
+            
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

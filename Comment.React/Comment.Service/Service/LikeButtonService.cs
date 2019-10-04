@@ -9,7 +9,8 @@ namespace Comment.React.Service
 {
     public interface ILikeButtonService
     {
-        IEnumerable<LikeButtonModel> GetByCommentId(int commentId);
+        bool LikeComment(int commentId, string email);
+        int GetTotalLikeComment(int commentId);
     }
     public class LikeButtonService : ILikeButtonService
     {
@@ -19,9 +20,38 @@ namespace Comment.React.Service
             _likeButtonRepo = likeButtonRepo;
         }
 
-        public IEnumerable<LikeButtonModel> GetByCommentId(int commentId)
+        public bool LikeComment(int commentId, string email)
         {
-            return _likeButtonRepo.GetMulti(x => x.CommentId == commentId);
+            try
+            {
+                var likeButton = _likeButtonRepo.GetSingleByCondition(x => x.CommentId == commentId && x.Email == email);
+                if (likeButton == null)
+                {
+                    _likeButtonRepo.Add(new LikeButtonModel
+                    {
+                        CommentId = commentId,
+                        Email = email,
+                        IsLike = true
+                    });
+                }
+                else
+                {
+                    likeButton.IsLike = !likeButton.IsLike;
+                    _likeButtonRepo.Update(likeButton);
+                }
+                _likeButtonRepo.SaveChange();
+
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
+            return true;
+        }
+        public int GetTotalLikeComment(int commentId)
+        {
+            return _likeButtonRepo.GetTotalLikeComment(commentId);
         }
     }
 }

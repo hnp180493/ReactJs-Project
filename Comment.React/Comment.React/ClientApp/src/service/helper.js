@@ -23,9 +23,11 @@ class Helper {
             case rangeHour:
                 return `${hour}h ago`;
             case rangeDay:
-                return `${Math.floor(hour * 24)}d ago`;
+                return `${Math.floor(hour / 24)}d ago`;
             case rangeMonth:
-                return `${Math.floor(hour * 24 * 30)}m ago`;
+                return `${Math.floor(hour / (24 * 30))}m ago`;
+            default:
+                break;
         }
     }
 }

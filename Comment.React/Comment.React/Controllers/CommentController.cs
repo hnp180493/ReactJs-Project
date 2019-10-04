@@ -1,4 +1,5 @@
-﻿using Comment.Model.Response;
+﻿using Comment.Model.Request;
+using Comment.Model.Response;
 using Comment.React.Models;
 using Comment.React.Service;
 using Microsoft.AspNetCore.Mvc;
@@ -20,18 +21,18 @@ namespace Comment.React.Controllers
 
         [HttpGet]
         [Route("get-comments")]
-        public IEnumerable<CommentResponse> GetComments(int page, int pageSize)
+        public ListCommentResponse GetComments([FromQuery]CommentRequest request)
         {
-            var comments = _commentService.GetCommentsAndUsers(page, pageSize);
+            var comments = _commentService.GetCommentsAndUsers(request);
 
             return comments;
         }
 
         [HttpGet]
         [Route("get-child-comments-and-users")]
-        public IEnumerable<CommentResponse> GetChildCommentsAndUsers(int parentId, int page, int pageSize)
+        public ListCommentResponse GetChildCommentsAndUsers([FromQuery]CommentRequest request)
         {
-            var comments = _commentService.GetChildCommentsAndUsers(parentId, page, pageSize);
+            var comments = _commentService.GetChildCommentsAndUsers(request);
 
             return comments;
         }

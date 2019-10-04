@@ -12,8 +12,13 @@ namespace Comment.React.Models
         public string Email { get; set; }
         public DateTime CreatedOn { get; set; }
         public string Content { get; set; }
-        public int Like { get; set; }
         public int ParentId { get; set; }
+        [NotMapped]
+        public int TotalReply { get; set; }
+        [NotMapped]
+        public int TotalLike { get; set; }
+        [NotMapped]
+        public bool IsLike { get; set; }
         [ForeignKey("Email")]
         public virtual UserModel User { get; set; }
     }
